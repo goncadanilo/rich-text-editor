@@ -1,4 +1,5 @@
 import React from 'react';
+import 'src/styles/global.scss';
 
 function App() {
   return (
