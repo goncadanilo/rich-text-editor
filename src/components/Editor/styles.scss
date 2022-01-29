@@ -1,0 +1,36 @@
+#editor-container {
+  background: var(--white);
+  box-shadow: var(--silver) 0px 0px 10px;
+  height: 60vh;
+}
+
+#editor-tools {
+  background: var(--wildSand);
+  padding: 4px;
+  margin-bottom: 8px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#editor-content {
+  padding: 16px;
+  width: 60vw;
+  min-height: 50vh;
+  height: 95%;
+  overflow-y: auto;
+}
+
+#tools-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--silver);
+  margin: 0 8px;
+}
+
+button.active {
+  background: var(--alto);
+}
+

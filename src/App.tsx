@@ -1,12 +1,11 @@
 import React from 'react';
+import Editor from 'src/components/Editor';
 import 'src/styles/global.scss';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <h1>Hello World!</h1>
-    </div>
+    <Editor />
   );
-}
+};
 
 export default App;

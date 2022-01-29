@@ -21,6 +21,7 @@
   ],
   "rules": {
     "react/jsx-filename-extension": [0],
+    "arrow-body-style": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -28,7 +29,12 @@
         "ts": "never",
         "tsx": "never"
       }
-   ]
+   ],
+   "react/function-component-definition": [2, { "namedComponents": "arrow-function" }],
+   "camelcase": [
+      "error", { "properties": "always", "ignoreDestructuring": false }
+    ],
+    "comma-dangle": ["error", "never"]
   },
   "settings": {
     "import/resolver": {
