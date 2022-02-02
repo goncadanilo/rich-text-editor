@@ -43,6 +43,10 @@ button {
   }
 }
 
+button.active {
+  background: var(--alto);
+}
+
 select {
   background: var(--white);
   border: 1px solid var(--alto);

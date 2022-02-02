@@ -6,6 +6,7 @@ import {
   FaAlignLeft,
   FaAlignRight,
   FaBold,
+  FaHeading,
   FaItalic,
   FaListOl,
   FaListUl,
@@ -13,9 +14,8 @@ import {
 } from 'react-icons/fa';
 import './styles.scss';
 
-type HeaderType = 'header-one' | 'header-two' | 'header-three';
 type StyleType = 'BOLD' | 'ITALIC' | 'UNDERLINE';
-type BlockType = 'unordered-list-item' | 'ordered-list-item';
+type BlockType = 'unordered-list-item' | 'ordered-list-item' | 'header-one';
 type AlignType = 'right' | 'left' | 'center';
 
 const Editor: React.FC = () => {
@@ -30,81 +30,56 @@ const Editor: React.FC = () => {
   });
 
   const styleTools = [
-    { string: 'BOLD', icon: <FaBold /> },
-    { string: 'ITALIC', icon: <FaItalic /> },
-    { string: 'UNDERLINE', icon: <FaUnderline /> }
-  ];
-
-  const headerTools = [
-    { string: 'Header 1', value: 'header-one' },
-    { string: 'Header 2', value: 'header-two' },
-    { string: 'Header 3', value: 'header-three' }
+    { type: 'BOLD', icon: <FaBold /> },
+    { type: 'ITALIC', icon: <FaItalic /> },
+    { type: 'UNDERLINE', icon: <FaUnderline /> }
   ];
 
   const blockTools = [
-    { string: 'unordered-list-item', icon: <FaListUl /> },
-    { string: 'ordered-list-item', icon: <FaListOl /> }
+    { type: 'header-one', icon: <FaHeading /> },
+    { type: 'unordered-list-item', icon: <FaListUl /> },
+    { type: 'ordered-list-item', icon: <FaListOl /> }
   ];
 
   const alignTools = [
-    { string: 'left', icon: <FaAlignLeft /> },
-    { string: 'center', icon: <FaAlignCenter /> },
-    { string: 'right', icon: <FaAlignRight /> }
+    { type: 'left', icon: <FaAlignLeft /> },
+    { type: 'center', icon: <FaAlignCenter /> },
+    { type: 'right', icon: <FaAlignRight /> }
   ];
-
-  const handleChange = (state: any) => {
-    setEditorState(state);
-  };
 
   const handleKeyCommand = (command: string, state: any) => {
     const newState = RichUtils.handleKeyCommand(state, command);
     if (newState) {
-      handleChange(newState);
+      setEditorState(newState);
       return 'handled';
     }
     return 'not-handled';
   };
 
-  const handleStyleTextEdit = (type: StyleType) => {
-    handleChange(RichUtils.toggleInlineStyle(editorState, type));
+  const handleTextEdit = (
+    type: StyleType | BlockType,
+    isBlockType?: boolean
+  ) => {
+    if (isBlockType) {
+      setEditorState(RichUtils.toggleBlockType(editorState, type));
+    } else {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, type));
+    }
   };
 
-  const handleBlockTextEdit = (type: BlockType | HeaderType) => {
-    setEditorState(RichUtils.toggleBlockType(editorState, type));
-  };
-
-  const isStyleActive = (styleType: StyleType) => {
-    return editorState.getCurrentInlineStyle().has(styleType);
+  const isStyleActive = (type: StyleType) => {
+    return editorState.getCurrentInlineStyle().has(type);
   };
 
   return (
     <div id="editor-container">
       <div id="editor-tools">
-        <select
-          name="header"
-          onChange={(event) => handleBlockTextEdit(event.target.value as BlockType)}
-        >
-          <option value="">Paragraph</option>
-          {headerTools.map(({ string, value }) => (
-            <option
-              key={value}
-              value={value}
-            >
-              {string}
-            </option>
-          ))}
-        </select>
-
-        <div id="tools-divider" />
-
-        {styleTools.map(({ string, icon }) => {
-          const toolString = string as StyleType;
+        {blockTools.map(({ type, icon }) => {
           return (
             <button
               type="button"
-              key={string}
-              className={isStyleActive(string as StyleType) ? 'active' : ''}
-              onClick={() => handleStyleTextEdit(toolString)}
+              key={type}
+              onClick={() => handleTextEdit(type as BlockType, true)}
             >
               {icon}
             </button>
@@ -113,13 +88,13 @@ const Editor: React.FC = () => {
 
         <div id="tools-divider" />
 
-        {alignTools.map(({ string, icon }) => {
+        {styleTools.map(({ type, icon }) => {
           return (
             <button
               type="button"
-              key={string}
-              className={string === textAlignment ? 'active' : ''}
-              onClick={() => setTextAlignment(string as AlignType)}
+              key={type}
+              className={isStyleActive(type as StyleType) ? 'active' : ''}
+              onClick={() => handleTextEdit(type as StyleType)}
             >
               {icon}
             </button>
@@ -128,12 +103,13 @@ const Editor: React.FC = () => {
 
         <div id="tools-divider" />
 
-        {blockTools.map(({ string, icon }) => {
+        {alignTools.map(({ type, icon }) => {
           return (
             <button
               type="button"
-              key={string}
-              onClick={() => handleBlockTextEdit(string as BlockType)}
+              key={type}
+              className={type === textAlignment ? 'active' : ''}
+              onClick={() => setTextAlignment(type as AlignType)}
             >
               {icon}
             </button>
@@ -143,7 +119,7 @@ const Editor: React.FC = () => {
       <div id="editor-content">
         <TextEditor
           ref={ref}
-          onChange={handleChange}
+          onChange={setEditorState}
           editorState={editorState}
           handleKeyCommand={handleKeyCommand}
           textAlignment={textAlignment}
