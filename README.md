@@ -44,7 +44,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 Esse projeto é um simples editor rich text desenvolvido para me familiarizar com o Framework **Draft.js**.
 
-Você pode acessar o resultado final [Aqui](https://reacteditor.netlify.app/).
+Você pode acessar o resultado final [aqui](https://reacteditor.netlify.app/).
 
 ## 📝 Licença
 
